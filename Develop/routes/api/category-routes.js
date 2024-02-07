@@ -76,7 +76,7 @@ router.delete('/:id', async (req, res) => {
   });
 
   if (!deletedCategory) {
-    res.status(404).json({ message: 'No location was found with this id!' });
+    res.status(404).json({ message: 'No id was found!' });
     return;
   } else {
     res.status(200).json(deletedCategory);

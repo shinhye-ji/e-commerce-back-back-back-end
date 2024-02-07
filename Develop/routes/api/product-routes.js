@@ -4,15 +4,36 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 // The `/api/products` endpoint
 
 // get all products
-router.get('/', (req, res) => {
-  // find all products
-  // be sure to include its associated Category and Tag data
+router.get('/', async (req, res) => {
+  try {
+  // find all products 
+    const products = await Product.findAll({
+      // be sure to include its associated Category and Tag data
+      include: [{ model: Category}, { model: Tag }]
+    });
+    res.status(200).json(products);
+ } catch (err) {
+    res.status(500).json(err);
+ }
 });
 
-// get one product
-router.get('/:id', (req, res) => {
-  // find a single product by its `id`
-  // be sure to include its associated Category and Tag data
+// get one product // be sure to include its associated Category and Tag data
+router.get('/:id', async (req, res) => {
+  try {
+   // find a single product by its `id`
+    const product = await Product.findByPk(req.params.id, {
+      include: [{ model: Category}, { model: Tag }]
+    });
+
+    if (!product) {
+      res.status(404).json({ message: 'No product was found with this id!' });
+      return;
+    } else {
+      res.status(200).json(product);
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 // create new product
@@ -92,8 +113,48 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
-  // delete one product by its `id` value
+// delete one product by its `id` value
+router.delete('/:id', async(req, res) => {
+  try {
+    const deleteProduct = await Product.destroy({
+      where: {
+        id: req.params.id
+      }
+    });
+
+    if (!deleteProduct) {
+      res.status(404).json({ message: 'Unable to delete product!' });
+      return;
+    } else {
+      res.status(200).json(deleteProduct);
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;
+
+// router.post('/', async (req, res) => {
+//   try{
+//    const newProduct = await Product.create(req.body);
+     
+//      if (req.body.tagIds.length) {
+//        const productTagIdArr = req.body.tagIds.map((tag_id) => {
+//          return {
+//            product_id: product.id,
+//            tag_id,
+//          };
+//        });
+//        await ProductTag.bulkCreate(productTagIdArr);
+//        res.status(200).json(newProduct);
+//      } else { // if no product tags, just respond
+//        res.status(200).json(newProduct);
+//      }
+     
+//    } catch (err) {
+//      console.log(err);
+//      res.status(400).json(err);
+//    };
+//  });
+ 
