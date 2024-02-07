@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
 // update a tag's name by its `id` value
 router.put('/:id', async (req, res) => {
   try {
-    const updateTag = await Tag.update(res.body, {
+    const updateTag = await Tag.update(req.body, {
       where: {
         id: req.params.id
       }
@@ -59,8 +59,10 @@ router.put('/:id', async (req, res) => {
 
     if (!updateTag) {
       res.status(404).json({ message: 'Tag does not exist! '});
+    } else {
+      res.status(200).json({ message: 'LETS GOOOOOOOO!' });
     }
-
+    
   } catch (err) {
     res.status(500).json(err);
   }
@@ -69,7 +71,7 @@ router.put('/:id', async (req, res) => {
 // delete on tag by its `id` value
 router.delete('/:id', async (req, res) => {
   try {
-    const deleteTag = await Tag.destroy(req.body, {
+    const deleteTag = await Tag.destroy({
       where: {
         id: req.params.id
       }
@@ -77,6 +79,8 @@ router.delete('/:id', async (req, res) => {
     
     if (!deleteTag) {
       res.status(404).json({ message: 'No id was found!' });
+    } else {
+      res.status(200).json({ message: 'LETS GOOOOOOOO!' });
     }
 
   } catch (err) {
