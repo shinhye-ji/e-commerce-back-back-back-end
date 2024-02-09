@@ -22,6 +22,7 @@ MySQL
 ## Screenshots
 
 Demo:
+
 ![gif](/imgs/Untitled_%20Feb%206,%202024%209_29%20PM.gif)
 
 ## Contact
